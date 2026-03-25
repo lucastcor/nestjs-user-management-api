@@ -188,6 +188,14 @@ Recommended manual test flow:
 
 The application compiles successfully and starts without dependency errors. The `Prisma`, `User`, `Profile`, and `Address` modules are initialized correctly, and the REST routes are mapped and available locally on port `3000`.
 
+## API Preview
+
+### Swagger UI
+![Swagger UI](./assets/swagger-ui.png)
+
+### User response with related profile and address
+![User response](./assets/user-response.png)
+
 ## Author
 
 **Lucas Teixeira Correia**
