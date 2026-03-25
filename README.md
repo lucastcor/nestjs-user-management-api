@@ -96,3 +96,221 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# CMP2305 - N1 - NestJS
+
+API RESTful desenvolvida para a atividade N1 da disciplina **Tecnologia de Construção de Software II**, utilizando **NestJS**, **Prisma ORM**, **PostgreSQL** e **Swagger**.
+
+O objetivo da atividade foi implementar o gerenciamento de três entidades com operações CRUD completas:
+
+- **Profile**
+- **User**
+- **Address**
+
+A proposta da prova pede uma API com persistência via Prisma, documentação com Swagger e relacionamento entre as entidades. O sistema implementado atende esse escopo, com estrutura organizada em módulos e integração com banco PostgreSQL. fileciteturn2file0L1-L8
+
+## Objetivo da atividade
+
+Desenvolver uma API RESTful com NestJS para gerenciar usuários, perfis e endereços, implementando operações de criação, leitura, atualização e remoção para cada entidade, com persistência em banco de dados e documentação da API via OpenAPI/Swagger. fileciteturn2file0L1-L8
+
+## Tecnologias utilizadas
+
+- NestJS
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- Swagger / OpenAPI
+- class-validator
+- class-transformer
+
+## Entidades e relacionamentos
+
+A modelagem segue a estrutura solicitada na atividade:
+
+### Profile
+- `id`: identificador UUID
+- `name`: nome do perfil
+- `createdAt`
+- `updatedAt`
+- relação **1:N** com `User`
+
+### User
+- `id`: identificador UUID
+- `email`: único
+- `password`
+- `name`
+- `profileId`: chave estrangeira para `Profile`
+- relação **N:1** com `Profile`
+- relação **1:1 opcional** com `Address`
+- `createdAt`
+- `updatedAt`
+
+### Address
+- `id`: identificador UUID
+- `street`
+- `number`
+- `city`
+- `state`
+- `zipCode`
+- `userId`: chave estrangeira para `User`
+- relação **1:1** com `User`
+- `createdAt`
+- `updatedAt`
+
+Essa estrutura foi definida no enunciado da prova para implementação no schema do Prisma. fileciteturn2file4L1-L12
+
+## Funcionalidades implementadas
+
+Foram implementadas as operações CRUD para as três entidades:
+
+### Profile
+- `POST /profile`
+- `GET /profile`
+- `GET /profile/:id`
+- `PATCH /profile/:id`
+- `DELETE /profile/:id`
+
+### User
+- `POST /user`
+- `GET /user`
+- `GET /user/:id`
+- `PATCH /user/:id`
+- `DELETE /user/:id`
+
+### Address
+- `POST /address`
+- `GET /address`
+- `GET /address/:id`
+- `PATCH /address/:id`
+- `DELETE /address/:id`
+
+As rotas seguem exatamente o padrão RESTful solicitado no enunciado. fileciteturn2file3L1-L15
+
+## Estrutura do projeto
+
+```text
+src/
+├── address/
+├── profile/
+├── prisma/
+├── user/
+├── app.module.ts
+└── main.ts
+
+prisma/
+└── schema.prisma
+```
+
+## Configuração do ambiente
+
+### 1. Instalar as dependências
+
+```bash
+npm install
+```
+
+### 2. Configurar o banco de dados
+
+No arquivo `.env`, definir a variável `DATABASE_URL` apontando para o PostgreSQL local.
+
+Exemplo:
+
+```env
+DATABASE_URL="postgresql://app_user:156324@localhost:5432/nest_n1?schema=public"
+```
+
+### 3. Executar as migrations
+
+```bash
+npx prisma migrate dev --name init_entities
+```
+
+### 4. Gerar o client do Prisma
+
+```bash
+npx prisma generate
+```
+
+### 5. Executar a aplicação
+
+```bash
+npm run start:dev
+```
+
+## Documentação da API
+
+A documentação foi configurada com Swagger, como pedido na atividade. Após iniciar a aplicação, a interface pode ser acessada em:
+
+```text
+http://localhost:3000/api/docs
+```
+
+A configuração do Swagger também faz parte explícita das tarefas da prova. fileciteturn2file3L13-L15
+
+## Validação e testes
+
+A atividade sugere a seguinte ordem de testes:
+
+1. Criar dois perfis, por exemplo `ADMIN` e `USER`
+2. Criar usuários associados a perfis existentes
+3. Criar um endereço associado a um usuário
+4. Verificar o comportamento do relacionamento 1:1 ao tentar cadastrar mais de um endereço para o mesmo usuário
+5. Testar listagem, atualização e remoção das entidades
+
+Essa ordem foi definida no enunciado para validar corretamente as relações entre as tabelas. fileciteturn2file5L1-L16
+
+## Resultado obtido
+
+Ao final da implementação:
+
+- a aplicação compilou sem erros;
+- os módulos `Prisma`, `User`, `Profile` e `Address` foram inicializados corretamente;
+- as rotas REST foram mapeadas com sucesso;
+- a aplicação subiu localmente na porta `3000`;
+- o Swagger foi configurado para documentação da API.
+
+Em execução, o Nest exibiu o mapeamento das rotas de `user`, `profile` e `address`, indicando que a base da atividade ficou funcional.
+
+## Observações
+
+- O projeto utiliza **UUID** como identificador das entidades.
+- O módulo do Prisma foi configurado para disponibilizar o `PrismaService` na aplicação.
+- Os DTOs foram ajustados com validação e integração com Swagger.
+- O banco utilizado foi **PostgreSQL local**, em vez de SQLite.
+
+## Possíveis testes manuais no Swagger
+
+### Criar perfil
+```json
+{
+  "name": "ADMIN"
+}
+```
+
+### Criar usuário
+```json
+{
+  "email": "admin@email.com",
+  "password": "123456",
+  "name": "Administrador",
+  "profileId": "UUID_DO_PROFILE"
+}
+```
+
+### Criar endereço
+```json
+{
+  "street": "Rua 10",
+  "number": 123,
+  "city": "Goiania",
+  "state": "GO",
+  "zipCode": "74000-000",
+  "userId": "UUID_DO_USER"
+}
+```
+
+## Autor
+
+**Lucas Teixeira Correia**
+
+Disciplina: **CMP2305 - Tecnologia de Construção de Software II**

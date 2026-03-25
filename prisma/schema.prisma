@@ -14,12 +14,35 @@ datasource db {
 	provider = "postgresql"
 }
 
-model User {
+model Profile {
+  id        String   @id @default(uuid())
+  name      String
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-	id Int @id @default(autoincrement())
-	email String @unique
-	name String?
-	password String
-	createdAt DateTime @default(now())
-	updateAt DateTime @updatedAt
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id])
+  address   Address?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  street    String
+  number    Int
+  city      String
+  state     String
+  zipCode   String
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
